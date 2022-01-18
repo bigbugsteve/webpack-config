@@ -2,6 +2,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 let mode = "development"
 let target = "web";
+
 if ( process.env.NODE_ENV === "production" ) {
     mode = "production";
     target = "browserslist"
@@ -17,7 +18,7 @@ module.exports = {
                 use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"] // this order!!
             },
             {
-                test: /\.js$/,  //$ ends with .js - rules for js
+                test: /\.jsx?$/,            //$ ends with .js - rules for js
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
@@ -28,9 +29,13 @@ module.exports = {
 
     plugins: [new MiniCssExtractPlugin()],
 
+    resolve: {
+        extensions: [".js", ".jsx"], // support js,jsx for React, dont have to add file extension at import
+    },
+
     devtool: "source-map",         // pretranslated js in console eg
     devServer: {
         static: "./dist",   // instead of contentBase 
-        hot: true,
+        hot: true,          // hot reload on save (not refresh page)
     }
 }
