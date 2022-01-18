@@ -1,5 +1,7 @@
+const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const CleanWebpackPlugin = require("clean-webpack-plugin");
 let mode = "development"
 let target = "web";
 
@@ -13,6 +15,7 @@ module.exports = {
     target: target,
 
     output: {
+        path: path.resolve(__dirname, "dist"),
         assetModuleFilename: "images/[hash][ext][query]"
     },
     module: {
@@ -50,7 +53,13 @@ module.exports = {
         ]
     },
 
-    plugins: [new MiniCssExtractPlugin()],
+    plugins: [
+        // new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin(), 
+        new HtmlWebpackPlugin({
+            template: "./src/index.html",       // html template
+        })
+    ],
 
     resolve: {
         extensions: [".js", ".jsx"], // support js,jsx for React, dont have to add file extension at import
