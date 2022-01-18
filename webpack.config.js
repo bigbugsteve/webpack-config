@@ -1,19 +1,30 @@
 const path = require("path");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const CleanWebpackPlugin = require("clean-webpack-plugin");
 let mode = "development"
 let target = "web";
+const plugins = [
+    // new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(), 
+    new HtmlWebpackPlugin({
+        template: "./src/index.html",       // html template
+    }),
+]
 
 if ( process.env.NODE_ENV === "production" ) {
     mode = "production";
     target = "browserslist"
+} else {
+    plugins.push(new ReactRefreshWebpackPlugin())
 }
 
 module.exports = {
     mode: mode,
     target: target,
 
+    entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "dist"),
         assetModuleFilename: "images/[hash][ext][query]"
@@ -53,13 +64,7 @@ module.exports = {
         ]
     },
 
-    plugins: [
-        // new CleanWebpackPlugin(),
-        new MiniCssExtractPlugin(), 
-        new HtmlWebpackPlugin({
-            template: "./src/index.html",       // html template
-        })
-    ],
+    plugins: plugins,
 
     resolve: {
         extensions: [".js", ".jsx"], // support js,jsx for React, dont have to add file extension at import
@@ -68,6 +73,6 @@ module.exports = {
     devtool: "source-map",         // pretranslated js in console eg
     devServer: {
         static: "./dist",   // instead of contentBase 
-        hot: true,          // hot reload on save (not refresh page)
+        hot: true,          // hot reload on save (not refresh page) (css)
     }
 }
